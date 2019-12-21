@@ -3,6 +3,7 @@
 namespace Trappar\AliceGenerator;
 
 use Metadata\MetadataFactoryInterface;
+use ReflectionClass;
 use Trappar\AliceGenerator\DataStorage\PersistedObjectCache;
 use Trappar\AliceGenerator\DataStorage\ValueContext;
 use Trappar\AliceGenerator\Exception\InvalidPropertyNameException;
@@ -198,14 +199,17 @@ class ValueVisitor
         $classMetadata = $this->metadataFactory->getMetadataForClass($class);
 
         // Create a new instance of this class to check values against
-        $newObject = $classMetadata->reflection->newInstanceWithoutConstructor();
+        $reflection = new ReflectionClass($classMetadata->name);
+        $newObject = $reflection->newInstanceWithoutConstructor();
 
         $saveValues = [];
         $this->recursionDepth++;
 
         foreach ($classMetadata->propertyMetadata as $metadata) {
-            $value        = $metadata->reflection->getValue($object);
-            $initialValue = $metadata->reflection->getValue($newObject);
+            $propertyReflection = $reflection->getProperty($metadata->name);
+            $propertyReflection->setAccessible(true);
+            $value        = $propertyReflection->getValue($object);
+            $initialValue = $propertyReflection->getValue($newObject);
 
             $valueContext = new ValueContext($value, $class, $object, $metadata, $this);
 
