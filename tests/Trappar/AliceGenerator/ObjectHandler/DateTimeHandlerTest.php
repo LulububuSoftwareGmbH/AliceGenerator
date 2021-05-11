@@ -13,7 +13,7 @@ class DateTimeHandlerTest extends TestCase
      */
     private $handler;
 
-    public function setup()
+    public function setup(): void
     {
         $this->handler = new DateTimeHandler();
     }

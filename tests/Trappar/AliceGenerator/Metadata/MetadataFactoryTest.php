@@ -19,7 +19,7 @@ class MetadataFactoryTest extends TestCase
      */
     private $driverFactory;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->driverFactory = new DefaultMetadataDriverFactory();
     }
@@ -42,7 +42,7 @@ class MetadataFactoryTest extends TestCase
     public function testLoadingYamlNoMetadataInFile()
     {
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessageRegExp('/expected metadata/i');
+        $this->expectExceptionMessageMatches('/expected metadata/i');
 
         $metadataFactory = new MetadataFactory($this->driverFactory->createDriver(
             ['Trappar\AliceGenerator\Tests\Metadata\Fixtures' => __DIR__ . '/Fixtures'],

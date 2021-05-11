@@ -18,7 +18,7 @@ class CallbackFakerResolverTest extends TestCase
      */
     private $resolver;
 
-    public function setup()
+    public function setup(): void
     {
         $this->resolver = new CallbackFakerResolver();
     }
@@ -47,21 +47,21 @@ class CallbackFakerResolverTest extends TestCase
     public function testInvalidClass()
     {
         $this->expectException(FakerResolverException::class);
-        $this->expectExceptionMessageRegExp('/must be statically callable/');
+        $this->expectExceptionMessageMatches('/must be statically callable/');
         $this->runResolve(['invalid_class', 'toFixture']);
     }
 
     public function testInvalidMethod()
     {
         $this->expectException(FakerResolverException::class);
-        $this->expectExceptionMessageRegExp('/must publicly exist/');
+        $this->expectExceptionMessageMatches('/must publicly exist/');
         $this->runResolve(['invalidMethod']);
     }
 
     public function testTooManyArguments()
     {
         $this->expectException(FakerResolverException::class);
-        $this->expectExceptionMessageRegExp('/can only accept one or two/i');
+        $this->expectExceptionMessageMatches('/can only accept one or two/i');
         $this->runResolve([1,2,3,4]);
     }
 

@@ -23,7 +23,7 @@ class DoctrinePersisterTest extends TestCase
      */
     private $persister;
 
-    public function setup()
+    public function setup(): void
     {
         $this->em        = FixtureUtils::buildEntityManager(__DIR__ . '/../Entity');
         $this->persister = new DoctrinePersister($this->em);

@@ -15,7 +15,7 @@ class MetadataResolverTest extends TestCase
     public function testInvalidTypeNoTypes()
     {
         $this->expectException(FakerResolverException::class);
-        $this->expectExceptionMessageRegExp('/no faker resolver.*no faker resolver types/i');
+        $this->expectExceptionMessageMatches('/no faker resolver.*no faker resolver types/i');
 
         $this->getResolver()->resolve($this->getValueContext());
     }
@@ -23,7 +23,7 @@ class MetadataResolverTest extends TestCase
     public function testInvalidTypeWithAvailableTypes()
     {
         $this->expectException(FakerResolverException::class);
-        $this->expectExceptionMessageRegExp('/no faker resolver.*available types are/i');
+        $this->expectExceptionMessageMatches('/no faker resolver.*available types are/i');
 
         $resolver = $this->getResolver();
         $resolver->addFakerResolver(new CallbackFakerResolver());
