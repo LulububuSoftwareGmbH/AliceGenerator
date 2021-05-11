@@ -2,9 +2,9 @@
 
 namespace Trappar\AliceGenerator\Persister;
 
-use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Trappar\AliceGenerator\DataStorage\ValueContext;
 
@@ -20,17 +20,17 @@ class DoctrinePersister extends AbstractPersister
         $this->om = $om;
     }
 
-    public function getClass($object)
+    public function getClass(object $object): string
     {
         return ClassUtils::getClass($object);
     }
 
-    public function isObjectManagedByPersister($object)
+    public function isObjectManagedByPersister(object $object): bool
     {
-        return $this->getMetadata($object);
+        return $this->getMetadata($object) !== false;
     }
 
-    public function preProcess($object)
+    public function preProcess(object $object): void
     {
         // Force proxy objects to load data
         if (method_exists($object, '__load')) {
@@ -38,9 +38,10 @@ class DoctrinePersister extends AbstractPersister
         }
     }
 
-    public function isPropertyNoOp(ValueContext $context)
+    public function isPropertyNoOp(ValueContext $context): bool
     {
         $classMetadata = $this->getMetadata($context->getContextObject());
+        \assert($classMetadata instanceof ClassMetadataInfo);
 
         $propName = $context->getPropName();
 
@@ -64,10 +65,9 @@ class DoctrinePersister extends AbstractPersister
     }
 
     /**
-     * @param $object
      * @return bool|ClassMetadata|ClassMetadataInfo
      */
-    protected function getMetadata($object)
+    protected function getMetadata(object $object)
     {
         try {
             return $this->om->getClassMetadata($this->getClass($object));

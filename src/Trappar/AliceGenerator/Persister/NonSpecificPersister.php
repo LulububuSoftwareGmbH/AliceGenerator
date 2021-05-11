@@ -9,7 +9,7 @@ class NonSpecificPersister extends AbstractPersister
     /**
      * @inheritDoc
      */
-    public function isObjectManagedByPersister($object)
+    public function isObjectManagedByPersister(object $object): bool
     {
         return true;
     }
@@ -17,14 +17,14 @@ class NonSpecificPersister extends AbstractPersister
     /**
      * @inheritDoc
      */
-    public function preProcess($object)
+    public function preProcess(object $object): void
     {
     }
 
     /**
      * @inheritDoc
      */
-    public function isPropertyNoOp(ValueContext $context)
+    public function isPropertyNoOp(ValueContext $context): bool
     {
         return false;
     }

@@ -18,19 +18,22 @@ class MetadataResolver extends AbstractMetadataResolver
         $this->addFakerResolvers($resolvers);
     }
 
-    public function addFakerResolvers(array $fakerResolvers)
+    public function addFakerResolvers(array $fakerResolvers): void
     {
         foreach ($fakerResolvers as $fakerResolver) {
             $this->addFakerResolver($fakerResolver);
         }
     }
 
-    public function addFakerResolver(FakerResolverInterface $fakerResolver)
+    public function addFakerResolver(FakerResolverInterface $fakerResolver): void
     {
         $this->fakerResolvers[$fakerResolver->getType()] = $fakerResolver;
     }
 
-    public function validate(ValueContext $valueContext)
+    /**
+     * @throws FakerResolverException
+     */
+    public function validate(ValueContext $valueContext): void
     {
         if ($valueContext->getMetadata()->fakerName) {
             $type = $valueContext->getMetadata()->fakerResolverType;
@@ -55,7 +58,7 @@ class MetadataResolver extends AbstractMetadataResolver
         }
     }
 
-    private function getAvailableFakerResolverTypes()
+    private function getAvailableFakerResolverTypes(): string
     {
         if (count($types = array_keys($this->fakerResolvers))) {
             $typesFormatted = array_map(function ($type) {

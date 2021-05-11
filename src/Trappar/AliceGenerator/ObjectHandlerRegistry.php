@@ -20,17 +20,14 @@ class ObjectHandlerRegistry implements ObjectHandlerRegistryInterface
     /**
      * @inheritdoc
      */
-    public function registerHandlers(array $handlers)
+    public function registerHandlers(array $handlers): void
     {
         foreach ($handlers as $handler) {
             $this->registerHandler($handler);
         }
     }
 
-    /**
-     * @param ObjectHandlerInterface $handler
-     */
-    public function registerHandler(ObjectHandlerInterface $handler)
+    public function registerHandler(ObjectHandlerInterface $handler): void
     {
         array_unshift($this->handlers, $handler);
     }
@@ -38,7 +35,7 @@ class ObjectHandlerRegistry implements ObjectHandlerRegistryInterface
     /**
      * @inheritdoc
      */
-    public function runHandlers(ValueContext $valueContext)
+    public function runHandlers(ValueContext $valueContext): bool
     {
         foreach ($this->handlers as $handler) {
             if ($handler->handle($valueContext)) {

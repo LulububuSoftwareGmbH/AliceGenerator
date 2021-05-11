@@ -29,7 +29,7 @@ class PropertyReferenceNamer implements ReferenceNamerInterface
         $this->propertyNames = $propertyNames;
     }
 
-    public function createReference($object, $key)
+    public function createReference(object $object, int $key): string
     {
         $class = ClassUtils::getClass($object);
 

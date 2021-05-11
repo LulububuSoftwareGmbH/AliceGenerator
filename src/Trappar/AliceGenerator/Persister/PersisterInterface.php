@@ -10,34 +10,23 @@ interface PersisterInterface
      * Should return the class for the given object.
      * example: In DoctrinePersister sometimes objects may be proxies which need to be resolved, so a special utility function
      *          must be used to determine an object's class.
-     *
-     * @param $object
-     * @return string
      */
-    public function getClass($object);
+    public function getClass(object $object): string;
 
     /**
      * Should return true if the object is managed by this persister
-     *
-     * @param $object
-     * @return boolean
      */
-    public function isObjectManagedByPersister($object);
+    public function isObjectManagedByPersister(object $object): bool;
 
     /**
      * Any code which needs to be immediately run on a persisted object to get the object ready for serialization goes
      * here
-     *
-     * @param $object
      */
-    public function preProcess($object);
+    public function preProcess(object $object): void;
 
     /**
      * Should return true if this property should always be skipped during serialization
      * Example: normally true for IDs
-     *
-     * @param ValueContext $context
-     * @return bool
      */
-    public function isPropertyNoOp(ValueContext $context);
+    public function isPropertyNoOp(ValueContext $context): bool;
 }

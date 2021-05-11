@@ -23,7 +23,8 @@
     "require-dev": {
         "doctrine/orm": "^2.6",
         "phpunit/phpunit": "^9.5",
-        "nelmio/alice": "^3.3"
+        "nelmio/alice": "^3.3",
+        "phpstan/phpstan": "^0.12.86"
     },
     "autoload": {
         "psr-4": { "Trappar\\AliceGenerator\\": "src/Trappar/AliceGenerator" }

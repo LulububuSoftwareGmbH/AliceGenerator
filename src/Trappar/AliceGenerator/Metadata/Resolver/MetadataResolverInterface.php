@@ -9,7 +9,6 @@ interface MetadataResolverInterface
     /**
      * Calls validate, handle, and then saves the resulting value into the ValueContext
      *
-     * @param ValueContext $valueContext
      * @return mixed
      */
     public function resolve(ValueContext $valueContext);
@@ -17,7 +16,6 @@ interface MetadataResolverInterface
     /**
      * Should throw an error if the incoming ValueContext is incompatible with this resolver
      *
-     * @param ValueContext $valueContext
      * @return mixed
      */
     public function validate(ValueContext $valueContext);
@@ -25,7 +23,6 @@ interface MetadataResolverInterface
     /**
      * Uses data in the ValueContext
      *
-     * @param ValueContext $valueContext
      * @return mixed
      */
     public function handle(ValueContext $valueContext);

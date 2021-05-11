@@ -6,7 +6,6 @@ interface YamlWriterInterface
 {
     /**
      * @param array $data
-     * @return string
      */
-    public function write(array $data);
+    public function write(array $data): string;
 }

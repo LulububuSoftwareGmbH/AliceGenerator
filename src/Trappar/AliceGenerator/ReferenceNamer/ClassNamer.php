@@ -6,12 +6,12 @@ use Doctrine\Common\Util\ClassUtils;
 
 class ClassNamer implements ReferenceNamerInterface
 {
-    public function createReference($object, $key)
+    public function createReference(object $object, int $key): string
     {
         return $this->createPrefix($object).$key;
     }
 
-    public function createPrefix($object)
+    public function createPrefix(object $object): string
     {
         $class = ClassUtils::getClass($object);
 

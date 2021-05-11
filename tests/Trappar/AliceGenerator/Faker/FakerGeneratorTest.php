@@ -7,7 +7,7 @@ use Trappar\AliceGenerator\Faker\FakerGenerator;
 
 class FakerGeneratorTest extends TestCase
 {
-    public function test()
+    public function test(): void
     {
         $result = FakerGenerator::generate('foo', [
             1,

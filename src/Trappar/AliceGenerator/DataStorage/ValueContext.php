@@ -28,7 +28,7 @@ class ValueContext
     private $contextObject;
 
     /**
-     * @var string
+     * @var string|object|null
      */
     private $contextObjectClass;
 
@@ -42,10 +42,14 @@ class ValueContext
      */
     private $skipped = false;
 
+    /**
+     * @param mixed $value
+     * @param string|object|null $contextObjectClass
+     */
     public function __construct(
         $value = null,
         $contextObjectClass = null,
-        $contextObject = null,
+        object $contextObject = null,
         PropertyMetadata $metadata = null,
         ValueVisitor $valueVisitor = null
     )
@@ -57,18 +61,12 @@ class ValueContext
         $this->valueVisitor       = $valueVisitor;
     }
 
-    /**
-     * @return PropertyMetadata
-     */
-    public function getMetadata()
+    public function getMetadata(): PropertyMetadata
     {
         return $this->metadata;
     }
 
-    /**
-     * @return ValueVisitor
-     */
-    public function getValueVisitor()
+    public function getValueVisitor(): ValueVisitor
     {
         return $this->valueVisitor;
     }
@@ -82,11 +80,9 @@ class ValueContext
     }
 
     /**
-     * @param      $value
-     * @param bool $setModified
-     * @return $this
+     * @param mixed $value
      */
-    public function setValue($value, $setModified = true)
+    public function setValue($value, bool $setModified = true): self
     {
         $this->value = $value;
         if ($setModified) {
@@ -104,6 +100,9 @@ class ValueContext
         return $this->contextObject;
     }
 
+    /**
+     * @return string|object|null
+     */
     public function getContextObjectClass()
     {
         return $this->contextObjectClass;
@@ -117,26 +116,17 @@ class ValueContext
         return $this->getMetadata()->name;
     }
 
-    /**
-     * @return boolean
-     */
-    public function isModified()
+    public function isModified(): bool
     {
         return $this->modified;
     }
 
-    /**
-     * @return boolean
-     */
-    public function isSkipped()
+    public function isSkipped(): bool
     {
         return $this->skipped;
     }
 
-    /**
-     * @param boolean $skipped
-     */
-    public function setSkipped($skipped)
+    public function setSkipped(bool $skipped): void
     {
         $this->skipped = $skipped;
     }

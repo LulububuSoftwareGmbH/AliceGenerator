@@ -16,7 +16,7 @@ class DoctrinePersisterCompositeTest extends TestCase
      */
     private $em;
     /**
-     * @var DoctrinePersisterTesterComposite
+     * @var DoctrinePersister
      */
     private $persister;
 
@@ -26,7 +26,7 @@ class DoctrinePersisterCompositeTest extends TestCase
         $this->persister = new DoctrinePersister($this->em);
     }
 
-    public function testIsPropertyNoOp()
+    public function testIsPropertyNoOp(): void
     {
         $tester = new DoctrinePersisterTesterComposite();
 

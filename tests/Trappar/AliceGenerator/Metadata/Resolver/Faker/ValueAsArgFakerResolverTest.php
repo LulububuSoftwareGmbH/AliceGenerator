@@ -10,7 +10,7 @@ use Trappar\AliceGenerator\Tests\Fixtures\User;
 
 class ValueAsArgFakerResolverTest extends TestCase
 {
-    public function testResolve()
+    public function testResolve(): void
     {
         $resolver = new ValueAsArgFakerResolver();
 

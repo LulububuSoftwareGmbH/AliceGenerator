@@ -29,7 +29,7 @@ class DoctrinePersisterTest extends TestCase
         $this->persister = new DoctrinePersister($this->em);
     }
 
-    public function testGetClass()
+    public function testGetClass(): void
     {
         $user = new User();
         $this->assertSame(User::class, $this->persister->getClass($user));
@@ -38,13 +38,13 @@ class DoctrinePersisterTest extends TestCase
         $this->assertSame(User::class, $this->persister->getClass($proxyUser));
     }
 
-    public function testIsObjectManagedByPersister()
+    public function testIsObjectManagedByPersister(): void
     {
-        $this->assertInstanceOf(ClassMetadata::class, $this->persister->isObjectManagedByPersister(new User()));
+        $this->assertTrue($this->persister->isObjectManagedByPersister(new User()));
         $this->assertFalse($this->persister->isObjectManagedByPersister(new \stdClass()));
     }
 
-    public function testPreProcess()
+    public function testPreProcess(): void
     {
         $mock = $this->createMock(get_class($this->em->getProxyFactory()->getProxy(User::class, ['id' => 1])));
         $mock->expects($this->once())
@@ -53,7 +53,7 @@ class DoctrinePersisterTest extends TestCase
         $this->persister->preProcess($mock);
     }
 
-    public function testIsPropertyNoOp()
+    public function testIsPropertyNoOp(): void
     {
         $tester = new DoctrinePersisterTester();
 
@@ -69,7 +69,7 @@ class DoctrinePersisterTest extends TestCase
         $this->assertTrue($this->persister->isPropertyNoOp($mock));
     }
 
-    public function testGeneratorNone()
+    public function testGeneratorNone(): void
     {
         $tester = new DoctrinePersisterTesterGeneratorNone();
 

@@ -8,7 +8,7 @@ use Trappar\AliceGenerator\Persister\NonSpecificPersister;
 
 class PersistedObjectCacheTest extends TestCase
 {
-    public function test()
+    public function test(): void
     {
         $cache = new PersistedObjectCache();
         $cache->setPersister(new NonSpecificPersister());

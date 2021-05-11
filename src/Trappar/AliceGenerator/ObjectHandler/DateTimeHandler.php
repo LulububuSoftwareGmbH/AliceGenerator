@@ -6,7 +6,7 @@ use Trappar\AliceGenerator\DataStorage\ValueContext;
 
 class DateTimeHandler implements ObjectHandlerInterface
 {
-    public function handle(ValueContext $valueContext)
+    public function handle(ValueContext $valueContext): bool
     {
         if (!($datetime = $valueContext->getValue()) instanceof \DateTime) {
             return false;

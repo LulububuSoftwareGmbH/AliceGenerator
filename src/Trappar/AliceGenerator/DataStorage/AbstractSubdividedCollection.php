@@ -17,16 +17,12 @@ abstract class AbstractSubdividedCollection
      */
     private $stores = [];
 
-    public function setPersister(PersisterInterface $persister)
+    public function setPersister(PersisterInterface $persister): void
     {
         $this->persister = $persister;
     }
 
-    /**
-     * @param $object
-     * @return ArrayCollection
-     */
-    public function getStore($object)
+    public function getStore(object $object): ArrayCollection
     {
         $subdivision = $this->determineSubdivision($object);
 
@@ -37,12 +33,12 @@ abstract class AbstractSubdividedCollection
         return $this->stores[$subdivision];
     }
 
-    protected function determineSubdivision($object)
+    protected function determineSubdivision(object $object): string
     {
         return $this->persister->getClass($object);
     }
 
-    protected function getBackingStore()
+    protected function getBackingStore(): ArrayCollection
     {
         return new ArrayCollection();
     }

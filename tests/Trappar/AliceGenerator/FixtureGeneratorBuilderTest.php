@@ -11,12 +11,12 @@ use Trappar\AliceGenerator\Tests\Util\FixtureUtils;
 
 class FixtureGeneratorBuilderTest extends TestCase
 {
-    public function testBuildFixtureGenerator()
+    public function testBuildFixtureGenerator(): void
     {
         $this->assertInstanceOf('Trappar\AliceGenerator\FixtureGenerator', FixtureUtils::buildFixtureGenerator());
     }
 
-    public function testConfiguringObjectHandlerRegistry()
+    public function testConfiguringObjectHandlerRegistry(): void
     {
         FixtureGeneratorBuilder::create()
             ->configureObjectHandlerRegistry(function ($registry) {
@@ -24,7 +24,7 @@ class FixtureGeneratorBuilderTest extends TestCase
             });
     }
 
-    public function testConfiguringMetadataResolver()
+    public function testConfiguringMetadataResolver(): void
     {
         FixtureGeneratorBuilder::create()
             ->configureMetadataResolver(function ($registry) {
@@ -32,7 +32,7 @@ class FixtureGeneratorBuilderTest extends TestCase
             });
     }
 
-    public function testAddInvalidMetadataDir()
+    public function testAddInvalidMetadataDir(): void
     {
         $this->expectException(InvalidArgumentException::class);
         FixtureGeneratorBuilder::create()->addMetadataDir('asdf');

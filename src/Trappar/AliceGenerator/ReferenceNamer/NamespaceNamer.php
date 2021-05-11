@@ -6,15 +6,21 @@ use Doctrine\Common\Util\ClassUtils;
 
 class NamespaceNamer implements ReferenceNamerInterface
 {
+    /**
+     * @var string
+     */
     protected $namespaceSeparator = '';
+    /**
+     * @var string[]
+     */
     protected $ignoredNamespaces = [];
 
-    public function createReference($object, $key)
+    public function createReference(object $object, int $key): string
     {
         return $this->createPrefix($object).$key;
     }
 
-    public function createPrefix($object)
+    public function createPrefix(object $object): string
     {
         $class = ClassUtils::getClass($object);
 
@@ -32,21 +38,16 @@ class NamespaceNamer implements ReferenceNamerInterface
     }
 
     /**
-     * @param array $ignoredNamespaces
-     * @return NamespaceNamer
+     * @param string[] $ignoredNamespaces
      */
-    public function setIgnoredNamespaces($ignoredNamespaces)
+    public function setIgnoredNamespaces(array $ignoredNamespaces): NamespaceNamer
     {
         $this->ignoredNamespaces = $ignoredNamespaces;
 
         return $this;
     }
 
-    /**
-     * @param string $namespaceSeparator
-     * @return NamespaceNamer
-     */
-    public function setNamespaceSeparator($namespaceSeparator)
+    public function setNamespaceSeparator(string $namespaceSeparator): NamespaceNamer
     {
         $this->namespaceSeparator = $namespaceSeparator;
 

@@ -1,0 +1,15 @@
+parameters:
+    level: 5
+    customRulesetUsed: true
+    paths:
+        - src
+        - tests
+    ignoreErrors:
+        - '#Property Trappar\\AliceGenerator\\Tests.*\\Fixtures\\.* has no typehint specified#'
+
+rules:
+    - PHPStan\Rules\Functions\MissingFunctionParameterTypehintRule
+    - PHPStan\Rules\Functions\MissingFunctionReturnTypehintRule
+    - PHPStan\Rules\Methods\MissingMethodParameterTypehintRule
+    - PHPStan\Rules\Methods\MissingMethodReturnTypehintRule
+    - PHPStan\Rules\Properties\MissingPropertyTypehintRule

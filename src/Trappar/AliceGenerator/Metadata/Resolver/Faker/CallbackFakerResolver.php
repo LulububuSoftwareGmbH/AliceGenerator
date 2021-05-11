@@ -10,12 +10,15 @@ class CallbackFakerResolver extends AbstractFakerResolver
     /**
      * @inheritdoc
      */
-    public function getType()
+    public function getType(): string
     {
         return 'callback';
     }
 
-    public function validate(ValueContext $valueContext)
+    /**
+     * @throws FakerResolverException
+     */
+    public function validate(ValueContext $valueContext): void
     {
         $target = $this->getTarget($valueContext);
 
@@ -55,6 +58,9 @@ class CallbackFakerResolver extends AbstractFakerResolver
         return call_user_func($target, $valueContext);
     }
 
+    /**
+     * @return mixed
+     */
     private function getTarget(ValueContext $valueContext)
     {
         switch ($count = count($args = $valueContext->getMetadata()->fakerResolverArgs)) {
