@@ -13,7 +13,7 @@
     "require": {
         "php": ">=7.1",
         "symfony/yaml": ">=2.8",
-        "doctrine/common": "^2.6",
+        "doctrine/common": "^2.11 || ^3.0",
         "jms/metadata": "^1.5"
     },
     "require-dev": {
