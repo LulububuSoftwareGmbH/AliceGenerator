@@ -20,7 +20,7 @@
     ],
     "require": {
         "php": "^7.3 || ^8.0",
-        "symfony/yaml": "^5.0",
+        "symfony/yaml": "^5.0 || ^6.0",
         "doctrine/common": "^3.0",
         "jms/metadata": "^2.6"
     },
