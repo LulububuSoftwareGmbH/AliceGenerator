@@ -3,7 +3,7 @@
 namespace Trappar\AliceGenerator\Metadata\Driver;
 
 use Doctrine\Common\Annotations\Reader;
-use Doctrine\ORM\Mapping\ClassMetadata;
+use Metadata\ClassMetadata;
 use Metadata\Driver\DriverInterface;
 use Metadata\MergeableClassMetadata;
 use Trappar\AliceGenerator\Annotation as Fixture;
