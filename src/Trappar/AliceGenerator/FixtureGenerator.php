@@ -22,7 +22,7 @@ class FixtureGenerator
         $this->valueVisitor = $valueVisitor;
     }
 
-    public function generateYaml(object $value, FixtureGenerationContext $fixtureGenerationContext = null): string
+    public function generateYaml($value, FixtureGenerationContext $fixtureGenerationContext = null): string
     {
         $results = $this->generateArray($value, $fixtureGenerationContext);
 
