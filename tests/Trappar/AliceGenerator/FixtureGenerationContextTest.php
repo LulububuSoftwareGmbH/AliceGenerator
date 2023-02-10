@@ -8,7 +8,7 @@ use Trappar\AliceGenerator\FixtureGenerationContext;
 
 class FixtureGenerationContextTest extends TestCase
 {
-    public function testAddNonObjectAsConstraint()
+    public function testAddNonObjectAsConstraint(): void
     {
         $this->expectException(InvalidArgumentException::class);
 

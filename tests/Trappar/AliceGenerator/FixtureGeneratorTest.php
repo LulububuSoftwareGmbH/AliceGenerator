@@ -19,7 +19,7 @@ use Trappar\AliceGenerator\YamlWriter;
 
 class FixtureGeneratorTest extends TestCase
 {
-    public function testDefaultFixtureGenerator()
+    public function testDefaultFixtureGenerator(): void
     {
         $fg = FixtureGeneratorBuilder::create()->build();
 
@@ -36,7 +36,7 @@ class FixtureGeneratorTest extends TestCase
         ], $result);
     }
 
-    public function testMultipleEntities()
+    public function testMultipleEntities(): void
     {
         $user = $this->createTestData();
 
@@ -50,7 +50,7 @@ class FixtureGeneratorTest extends TestCase
         $processedUser = $results['User-1'];
 
         // Doesn't matter that the resulting user has an array instead of an ArrayCollection - Doctrine will handle it
-        $processedUser->posts = new ArrayCollection($processedUser->posts);
+        $processedUser->posts = new ArrayCollection((array) $processedUser->posts);
 
         // These were set using Faker so we wouldn't expect them to be the same
         $processedUser->email = null;
@@ -59,7 +59,7 @@ class FixtureGeneratorTest extends TestCase
         $this->assertEquals($user, $processedUser);
     }
 
-    public function testWithUnknownObjectType()
+    public function testWithUnknownObjectType(): void
     {
         $user           = new User();
         $user->username = new \Exception();
@@ -68,7 +68,7 @@ class FixtureGeneratorTest extends TestCase
         FixtureUtils::getFixturesFromObjects($user);
     }
 
-    public function testGenerateYaml()
+    public function testGenerateYaml(): void
     {
         $post        = new Post();
         $post->title = 'test';
@@ -82,12 +82,12 @@ class FixtureGeneratorTest extends TestCase
         );
     }
 
-    public function testGenerateYamlCustomSpacing()
+    public function testGenerateYamlCustomSpacing(): void
     {
         $post        = new Post();
         $post->title = 'test';
 
-        $fgBuilder = FixtureUtils::buildFixtureGeneratorBuilder([]);
+        $fgBuilder = FixtureUtils::buildFixtureGeneratorBuilder(false);
         $fgBuilder->setYamlWriter(new YamlWriter(1, 1));
         $fg   = $fgBuilder->build();
         $yaml = $fg->generateYaml($post);
@@ -98,9 +98,9 @@ class FixtureGeneratorTest extends TestCase
         );
     }
 
-    public function testWithoutDoctrine()
+    public function testWithoutDoctrine(): void
     {
-        $fgBuilder = FixtureUtils::buildFixtureGeneratorBuilder([]);
+        $fgBuilder = FixtureUtils::buildFixtureGeneratorBuilder(false);
         $fgBuilder->setPersister(new NonSpecificPersister());
         $fg = $fgBuilder->build();
 
@@ -112,7 +112,7 @@ class FixtureGeneratorTest extends TestCase
         $this->assertCount(1, $results);
     }
 
-    public function testEntitiesLimitedRecursion()
+    public function testEntitiesLimitedRecursion(): void
     {
         $user = $this->createTestData();
 
@@ -124,7 +124,7 @@ class FixtureGeneratorTest extends TestCase
         $this->assertCount(1, $results);
     }
 
-    public function testNamespaceReferenceNamer()
+    public function testNamespaceReferenceNamer(): void
     {
         $user = $this->createTestData();
 
@@ -136,7 +136,7 @@ class FixtureGeneratorTest extends TestCase
         $this->assertArrayHasKey('TrapparAliceGeneratorTestsFixturesUser-1', $results[User::class]);
     }
 
-    public function testUniqueReferenceNamer()
+    public function testUniqueReferenceNamer(): void
     {
         $user = $this->createTestData();
 
@@ -148,7 +148,7 @@ class FixtureGeneratorTest extends TestCase
         $this->assertArrayHasKey('User-testUser', $results[User::class]);
     }
 
-    public function testIgnoringEmptyEntity()
+    public function testIgnoringEmptyEntity(): void
     {
         $user           = new User();
         $user->username = 'test';
@@ -159,7 +159,7 @@ class FixtureGeneratorTest extends TestCase
         $this->assertCount(1, FixtureUtils::convertObjectToFixtureAndBack($user));
     }
 
-    public function testIgnore()
+    public function testIgnore(): void
     {
         $user            = new User();
         $user->username  = 'test';
@@ -170,7 +170,7 @@ class FixtureGeneratorTest extends TestCase
         $this->assertArrayNotHasKey('lastLogin', $results[User::class]['User-1']);
     }
 
-    public function testIgnoreOnRelation()
+    public function testIgnoreOnRelation(): void
     {
         $post       = new Post();
         $post->body = 'test';
@@ -184,7 +184,7 @@ class FixtureGeneratorTest extends TestCase
         $this->assertCount(1, $results[Post::class]);
     }
 
-    public function testSortReferences()
+    public function testSortReferences(): void
     {
         $user            = new User();
         $tester          = new SortTester();
@@ -208,7 +208,7 @@ class FixtureGeneratorTest extends TestCase
         $this->assertSame(['SortTester-1', 'SortTester-2'], array_keys($sortedResults[SortTester::class]));
     }
 
-    public function testEntityConstraints()
+    public function testEntityConstraints(): void
     {
         $user1           = new User();
         $user1->username = 'user1';
@@ -223,10 +223,13 @@ class FixtureGeneratorTest extends TestCase
         );
 
         $this->assertCount(1, $results);
-        $this->assertSame('user1', current($results)->username);
+        $user = current($results);
+        \assert($user instanceof User);
+        $this->assertInstanceOf(User::class, $user);
+        $this->assertSame('user1', $user->username);
     }
 
-    public function testNotExcludingDefaultValues()
+    public function testNotExcludingDefaultValues(): void
     {
         $results = FixtureUtils::getFixturesFromObjects(
             new User(),
@@ -238,7 +241,7 @@ class FixtureGeneratorTest extends TestCase
         $this->assertArrayHasKey('username', $results[User::class]['User-1']);
     }
 
-    public function testOnObjectWithConstructor()
+    public function testOnObjectWithConstructor(): void
     {
         $this->assertCount(
             1,
@@ -248,7 +251,7 @@ class FixtureGeneratorTest extends TestCase
         );
     }
 
-    public function testStrictTypeChecking()
+    public function testStrictTypeChecking(): void
     {
         $post = new Post();
         $post->body = 0;
@@ -266,7 +269,7 @@ class FixtureGeneratorTest extends TestCase
         );
     }
 
-    private function createTestData()
+    private function createTestData(): User
     {
         $user           = new User();
         $user->username = 'testUser';
@@ -292,5 +295,8 @@ class FixtureGeneratorTest extends TestCase
 
 class TestObject
 {
+    /**
+     * @var mixed
+     */
     public $foo;
 }

@@ -12,18 +12,18 @@ use Trappar\AliceGenerator\Tests\Fixtures\User;
 
 class MetadataResolverTest extends TestCase
 {
-    public function testInvalidTypeNoTypes()
+    public function testInvalidTypeNoTypes(): void
     {
         $this->expectException(FakerResolverException::class);
-        $this->expectExceptionMessageRegExp('/no faker resolver.*no faker resolver types/i');
+        $this->expectExceptionMessageMatches('/no faker resolver.*no faker resolver types/i');
 
         $this->getResolver()->resolve($this->getValueContext());
     }
 
-    public function testInvalidTypeWithAvailableTypes()
+    public function testInvalidTypeWithAvailableTypes(): void
     {
         $this->expectException(FakerResolverException::class);
-        $this->expectExceptionMessageRegExp('/no faker resolver.*available types are/i');
+        $this->expectExceptionMessageMatches('/no faker resolver.*available types are/i');
 
         $resolver = $this->getResolver();
         $resolver->addFakerResolver(new CallbackFakerResolver());
@@ -31,12 +31,12 @@ class MetadataResolverTest extends TestCase
         $resolver->resolve($this->getValueContext());
     }
 
-    private function getResolver()
+    private function getResolver(): MetadataResolver
     {
         return new MetadataResolver();
     }
 
-    private function getValueContext()
+    private function getValueContext(): ValueContext
     {
         $metadata = new PropertyMetadata(User::class, 'username');
         $metadata->fakerName = 'test';

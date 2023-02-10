@@ -4,13 +4,14 @@ namespace Trappar\AliceGenerator\Builder;
 
 use Doctrine\Common\Annotations\Reader;
 use Metadata\Driver\DriverChain;
+use Metadata\Driver\DriverInterface;
 use Metadata\Driver\FileLocator;
 use Trappar\AliceGenerator\Metadata\Driver\AnnotationDriver;
 use Trappar\AliceGenerator\Metadata\Driver\YamlDriver;
 
 class DefaultMetadataDriverFactory implements MetadataDriverFactoryInterface
 {
-    public function createDriver(array $metadataDirs, Reader $annotationReader)
+    public function createDriver(array $metadataDirs, Reader $annotationReader): DriverInterface
     {
         $annotationDriver = new AnnotationDriver($annotationReader);
 

@@ -19,12 +19,12 @@ class MetadataFactoryTest extends TestCase
      */
     private $driverFactory;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->driverFactory = new DefaultMetadataDriverFactory();
     }
 
-    public function testLoadingYaml()
+    public function testLoadingYaml(): void
     {
         $metadataFactory = new MetadataFactory($this->driverFactory->createDriver(
             ['Trappar\AliceGenerator\Tests\Metadata\Fixtures' => __DIR__ . '/Fixtures'],
@@ -39,10 +39,10 @@ class MetadataFactoryTest extends TestCase
         $this->assertEquals($this->getDesiredClassMetadata(), $metadata);
     }
 
-    public function testLoadingYamlNoMetadataInFile()
+    public function testLoadingYamlNoMetadataInFile(): void
     {
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessageRegExp('/expected metadata/i');
+        $this->expectExceptionMessageMatches('/expected metadata/i');
 
         $metadataFactory = new MetadataFactory($this->driverFactory->createDriver(
             ['Trappar\AliceGenerator\Tests\Metadata\Fixtures' => __DIR__ . '/Fixtures'],
@@ -52,7 +52,7 @@ class MetadataFactoryTest extends TestCase
         $metadataFactory->getMetadataForClass(Bar::class);
     }
 
-    public function testLoadingAnnotations()
+    public function testLoadingAnnotations(): void
     {
         $metadataFactory = new MetadataFactory($this->driverFactory->createDriver([], new AnnotationReader()));
 
@@ -64,7 +64,7 @@ class MetadataFactoryTest extends TestCase
         $this->assertEquals($this->getDesiredClassMetadata(), $metadata);
     }
 
-    public function getDesiredClassMetadata()
+    public function getDesiredClassMetadata(): MergeableClassMetadata
     {
         $classMeta = new MergeableClassMetadata(Foo::class);
 

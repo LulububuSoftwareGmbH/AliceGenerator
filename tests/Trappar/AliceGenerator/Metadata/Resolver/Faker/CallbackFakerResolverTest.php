@@ -11,6 +11,9 @@ use Trappar\AliceGenerator\Tests\Fixtures\User;
 
 class CallbackFakerResolverTest extends TestCase
 {
+    /**
+     * @var string
+     */
     private $testProp = 'testProp';
 
     /**
@@ -18,22 +21,24 @@ class CallbackFakerResolverTest extends TestCase
      */
     private $resolver;
 
-    public function setup()
+    public function setup(): void
     {
         $this->resolver = new CallbackFakerResolver();
     }
 
     /**
      * @dataProvider getTestCases
-     * @param string $expected
      * @param array $fakerArgs
      */
-    public function testResolve($expected, array $fakerArgs)
+    public function testResolve(string $expected, array $fakerArgs): void
     {
         $this->assertSame($expected, $this->runResolve($fakerArgs));
     }
 
-    public function getTestCases()
+    /**
+     * @return array<array{string,string[]}>
+     */
+    public function getTestCases(): array
     {
         return [
             ['foo', [self::class, 'toFixtureString']],
@@ -44,27 +49,30 @@ class CallbackFakerResolverTest extends TestCase
         ];
     }
 
-    public function testInvalidClass()
+    public function testInvalidClass(): void
     {
         $this->expectException(FakerResolverException::class);
-        $this->expectExceptionMessageRegExp('/must be statically callable/');
+        $this->expectExceptionMessageMatches('/must be statically callable/');
         $this->runResolve(['invalid_class', 'toFixture']);
     }
 
-    public function testInvalidMethod()
+    public function testInvalidMethod(): void
     {
         $this->expectException(FakerResolverException::class);
-        $this->expectExceptionMessageRegExp('/must publicly exist/');
+        $this->expectExceptionMessageMatches('/must publicly exist/');
         $this->runResolve(['invalidMethod']);
     }
 
-    public function testTooManyArguments()
+    public function testTooManyArguments(): void
     {
         $this->expectException(FakerResolverException::class);
-        $this->expectExceptionMessageRegExp('/can only accept one or two/i');
+        $this->expectExceptionMessageMatches('/can only accept one or two/i');
         $this->runResolve([1,2,3,4]);
     }
 
+    /**
+     * @return mixed
+     */
     private function runResolve(array $fakerArgs)
     {
         $metadata = new PropertyMetadata(User::class, 'username');
@@ -78,22 +86,25 @@ class CallbackFakerResolverTest extends TestCase
         return $context->getValue();
     }
 
-    public static function toFixtureString()
+    public static function toFixtureString(): string
     {
         return 'foo';
     }
 
-    public function toFixtureStringNonStatic()
+    public function toFixtureStringNonStatic(): string
     {
         return $this->testProp;
     }
 
-    public static function toFixtureArray()
+    /**
+     * @return string[]
+     */
+    public static function toFixtureArray(): array
     {
         return ['bar'];
     }
 
-    public static function toFixtureValueContext(ValueContext $context)
+    public static function toFixtureValueContext(ValueContext $context): ValueContext
     {
         $context->setValue('baz');
 

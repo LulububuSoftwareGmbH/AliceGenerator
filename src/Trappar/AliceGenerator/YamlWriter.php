@@ -15,7 +15,7 @@ class YamlWriter implements YamlWriterInterface
      */
     private $indent;
 
-    public function __construct($inline, $indent)
+    public function __construct(int $inline, int $indent)
     {
         $this->inline = $inline;
         $this->indent = $indent;
@@ -24,7 +24,7 @@ class YamlWriter implements YamlWriterInterface
     /**
      * @inheritDoc
      */
-    public function write(array $data)
+    public function write(array $data): string
     {
         return Yaml::dump($data, $this->inline, $this->indent);
     }

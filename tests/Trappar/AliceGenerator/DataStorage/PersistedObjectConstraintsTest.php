@@ -9,7 +9,7 @@ use Trappar\AliceGenerator\Tests\Fixtures\User;
 
 class PersistedObjectConstraintsTest extends TestCase
 {
-    public function test()
+    public function test(): void
     {
         $user1 = new User();
         $user2 = new User();

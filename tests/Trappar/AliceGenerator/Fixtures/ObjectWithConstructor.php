@@ -21,6 +21,9 @@ class ObjectWithConstructor
      */
     private $foo;
 
+    /**
+     * @param mixed $fooValue
+     */
     public function __construct($fooValue)
     {
         $this->foo = $fooValue;

@@ -22,14 +22,18 @@ class FixtureGenerator
         $this->valueVisitor = $valueVisitor;
     }
 
-    public function generateYaml($value, $fixtureGenerationContext = null)
+    public function generateYaml(object $value, FixtureGenerationContext $fixtureGenerationContext = null): string
     {
         $results = $this->generateArray($value, $fixtureGenerationContext);
 
         return $this->yamlWriter->write($results);
     }
 
-    public function generateArray($value, $fixtureGenerationContext = null)
+    /**
+     * @param object|object[] $value
+     * @return array<mixed>
+     */
+    public function generateArray($value, FixtureGenerationContext $fixtureGenerationContext = null): array
     {
         if (!$fixtureGenerationContext) {
             $fixtureGenerationContext = new FixtureGenerationContext();

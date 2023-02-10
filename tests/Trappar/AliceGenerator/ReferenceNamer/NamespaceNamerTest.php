@@ -8,7 +8,7 @@ use Trappar\AliceGenerator\Tests\Fixtures\User;
 
 class NamespaceNamerTest extends TestCase
 {
-    public function testDefault()
+    public function testDefault(): void
     {
         $this->assertSame(
             'TrapparAliceGeneratorTestsFixturesUser-',
@@ -16,7 +16,7 @@ class NamespaceNamerTest extends TestCase
         );
     }
 
-    public function testIgnoredNamespaces()
+    public function testIgnoredNamespaces(): void
     {
         $this->assertSame(
             'TrapparFixturesUser-',
@@ -26,7 +26,7 @@ class NamespaceNamerTest extends TestCase
         );
     }
 
-    public function testNamespaceSeparator()
+    public function testNamespaceSeparator(): void
     {
         $this->assertSame(
             'Trappar-AliceGenerator-Tests-Fixtures-User-',
@@ -36,7 +36,7 @@ class NamespaceNamerTest extends TestCase
         );
     }
 
-    private function getNamer()
+    private function getNamer(): NamespaceNamer
     {
         return new NamespaceNamer();
     }

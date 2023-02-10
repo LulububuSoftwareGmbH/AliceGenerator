@@ -10,7 +10,7 @@ use Trappar\AliceGenerator\Tests\Fixtures\Post;
 
 class PropertyNamerTest extends TestCase
 {
-    public function testCreateNamer()
+    public function testCreateNamer(): void
     {
         $object        = new Post();
         $object->title = 'New Post';
@@ -24,7 +24,7 @@ class PropertyNamerTest extends TestCase
         );
     }
 
-    private function getNamer()
+    private function getNamer(): PropertyNamer
     {
         return new PropertyNamer();
     }

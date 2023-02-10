@@ -16,17 +16,17 @@ class DoctrinePersisterCompositeTest extends TestCase
      */
     private $em;
     /**
-     * @var DoctrinePersisterTesterComposite
+     * @var DoctrinePersister
      */
     private $persister;
 
-    public function setup()
+    public function setup(): void
     {
         $this->em        = FixtureUtils::buildEntityManager(__DIR__ . '/../Entity');
         $this->persister = new DoctrinePersister($this->em);
     }
 
-    public function testIsPropertyNoOp()
+    public function testIsPropertyNoOp(): void
     {
         $tester = new DoctrinePersisterTesterComposite();
 

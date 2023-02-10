@@ -9,7 +9,7 @@ class PersistedObjectCache extends AbstractSubdividedCollection
     const OBJECT_SKIPPED = 'CACHE_STORE_OBJECT_SKIPPED';
     const OBJECT_NOT_FOUND = 'CACHE_STORE_OBJECT_NOT_FOUND';
 
-    public function add($object)
+    public function add(object $object): int
     {
         $store = $this->getValidStore($object);
         $store->add($object);
@@ -17,13 +17,16 @@ class PersistedObjectCache extends AbstractSubdividedCollection
         return $store->count();
     }
 
-    public function skip($object)
+    public function skip(object $object): void
     {
         $this->getValidStore($object)->removeElement($object);
         $this->getSkippedStore($object)->add($object);
     }
 
-    public function find($object)
+    /**
+     * @return string|mixed
+     */
+    public function find(object $object)
     {
         $key = $this->getValidStore($object)->indexOf($object);
         if ($key !== false) {
@@ -38,24 +41,22 @@ class PersistedObjectCache extends AbstractSubdividedCollection
     }
 
     /**
-     * @param $object
-     * @return ArrayCollection
+     * @return ArrayCollection|mixed
      */
-    private function getValidStore($object)
+    private function getValidStore(object $object)
     {
         return $this->getStore($object)->get('valid');
     }
 
     /**
-     * @param $object
-     * @return ArrayCollection
+     * @return ArrayCollection|mixed
      */
-    private function getSkippedStore($object)
+    private function getSkippedStore(object $object)
     {
         return $this->getStore($object)->get('skipped');
     }
 
-    protected function getBackingStore()
+    protected function getBackingStore(): ArrayCollection
     {
         $collection = new ArrayCollection();
         $collection->set('valid', new ArrayCollection());

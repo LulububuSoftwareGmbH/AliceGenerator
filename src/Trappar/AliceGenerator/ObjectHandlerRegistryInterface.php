@@ -10,11 +10,7 @@ interface ObjectHandlerRegistryInterface
     /**
      * @param ObjectHandlerInterface[] $handlers
      */
-    public function registerHandlers(array $handlers);
+    public function registerHandlers(array $handlers): void;
 
-    /**
-     * @param ValueContext $valueContext
-     * @return bool
-     */
-    public function runHandlers(ValueContext $valueContext);
+    public function runHandlers(ValueContext $valueContext): bool;
 }

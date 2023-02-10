@@ -15,11 +15,7 @@ use Trappar\AliceGenerator\Persister\DoctrinePersister;
 
 class FixtureUtils
 {
-    /**
-     * @param $setMetadataDirs
-     * @return FixtureGeneratorBuilder
-     */
-    public static function buildFixtureGeneratorBuilder($setMetadataDirs)
+    public static function buildFixtureGeneratorBuilder(bool $setMetadataDirs): FixtureGeneratorBuilder
     {
         $entitiesPaths = ['Trappar\AliceGenerator\Tests\Fixtures' => __DIR__ . '/../Fixtures'];
         $em = self::buildEntityManager($entitiesPaths);
@@ -33,22 +29,18 @@ class FixtureUtils
         return $fgBuilder;
     }
 
-    /**
-     * @param bool $setMetadataDirs
-     * @return FixtureGenerator
-     */
-    public static function buildFixtureGenerator($setMetadataDirs = true)
+    public static function buildFixtureGenerator(bool $setMetadataDirs = true): FixtureGenerator
     {
         return self::buildFixtureGeneratorBuilder($setMetadataDirs)->build();
     }
 
     /**
-     * @param $entitiesDirs
-     * @return EntityManager
+     * @param string|string[]|null $entitiesDirs
+     *
      * @throws \Doctrine\Common\Annotations\AnnotationException
      * @throws \Doctrine\ORM\ORMException
      */
-    public static function buildEntityManager($entitiesDirs)
+    public static function buildEntityManager($entitiesDirs): EntityManager
     {
         $config = Setup::createConfiguration(true);
 
@@ -64,18 +56,29 @@ class FixtureUtils
         return EntityManager::create($conn, $config);
     }
 
-    public static function getObjectsFromFixtures(array $data)
+    /**
+     * @return object[]
+     */
+    public static function getObjectsFromFixtures(array $data): array
     {
         $loader = new NativeLoader();
         return $loader->loadData($data)->getObjects();
     }
 
-    public static function getFixturesFromObjects($objects, FixtureGenerationContext $context = null)
+    /**
+     * @param object|object[] $objects
+     * @return array<string,array<string,array<string,mixed>>>
+     */
+    public static function getFixturesFromObjects($objects, FixtureGenerationContext $context = null): array
     {
         return self::buildFixtureGenerator(false)->generateArray($objects, $context);
     }
 
-    public static function convertObjectToFixtureAndBack($objects, FixtureGenerationContext $context = null)
+    /**
+     * @param object|object[] $objects
+     * @return object[]
+     */
+    public static function convertObjectToFixtureAndBack($objects, FixtureGenerationContext $context = null): array
     {
         $fixtures = self::getFixturesFromObjects($objects, $context);
         return self::getObjectsFromFixtures($fixtures);

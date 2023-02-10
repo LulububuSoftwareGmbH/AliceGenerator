@@ -51,7 +51,7 @@ class ValueVisitor
      */
     private $recursionDepth;
     /**
-     * @var boolean
+     * @var bool
      */
     private $strictTypeChecking;
 
@@ -61,7 +61,7 @@ class ValueVisitor
         MetadataResolverInterface $metadataResolver,
         ObjectHandlerRegistryInterface $objectHandlerRegistry,
         PropertyNamerInterface $propertyNamer,
-        $strictTypeChecking
+        bool $strictTypeChecking
     )
     {
         $this->metadataFactory       = $metadataFactory;
@@ -72,7 +72,7 @@ class ValueVisitor
         $this->strictTypeChecking    = $strictTypeChecking;
     }
 
-    public function setup(FixtureGenerationContext $fixtureGenerationContext)
+    public function setup(FixtureGenerationContext $fixtureGenerationContext): void
     {
         $this->fixtureGenerationContext = $fixtureGenerationContext;
 
@@ -83,12 +83,15 @@ class ValueVisitor
         $this->fixtureGenerationContext->getPersistedObjectConstraints()->setPersister($this->persister);
     }
 
-    public function getResults()
+    public function getResults(): array
     {
         return $this->results;
     }
 
-    public function visitSimpleValue($value)
+    /**
+     * @param mixed $value
+     */
+    public function visitSimpleValue($value): ValueContext
     {
         $valueContext = new ValueContext($value);
         $this->visitUnknownType($valueContext);
@@ -96,7 +99,7 @@ class ValueVisitor
         return $valueContext;
     }
 
-    public function visitUnknownType(ValueContext $valueContext)
+    public function visitUnknownType(ValueContext $valueContext): void
     {
         if (is_array($valueContext->getValue())) {
             $this->visitArray($valueContext);
@@ -105,7 +108,7 @@ class ValueVisitor
         }
     }
 
-    public function visitArray(ValueContext $valueContext)
+    public function visitArray(ValueContext $valueContext): void
     {
         $array = $valueContext->getValue();
 
@@ -126,7 +129,7 @@ class ValueVisitor
         }
     }
 
-    public function visitObject(ValueContext $valueContext)
+    public function visitObject(ValueContext $valueContext): void
     {
         $object = $valueContext->getValue();
 
@@ -186,12 +189,11 @@ class ValueVisitor
     }
 
     /**
-     * @param       $object
-     * @param       $reference
-     * @return bool if the object was added to the object cache
+     * Returns true if the object was added to the object cache.
+     *
      * @throws \Exception
      */
-    private function handlePersistedObject($object, $reference)
+    private function handlePersistedObject(object $object, string $reference): bool
     {
         $class = $this->persister->getClass($object);
         $this->persister->preProcess($object);

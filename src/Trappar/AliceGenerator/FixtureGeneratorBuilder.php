@@ -64,8 +64,9 @@ class FixtureGeneratorBuilder
      */
     private $strictTypeChecking = true;
 
-    public static function create()
+    public static function create(): self
     {
+        /** @phpstan-ignore-next-line */
         return new static();
     }
 
@@ -92,12 +93,8 @@ class FixtureGeneratorBuilder
      * Adds a directory where the FixtureGenerator will look for class metadata.
      *
      * See: doc/configuration.md
-     *
-     * @param        $dir
-     * @param string $namespacePrefix
-     * @return $this
      */
-    public function addMetadataDir($dir, $namespacePrefix = '')
+    public function addMetadataDir(string $dir, string $namespacePrefix = ''): self
     {
         if (!is_dir($dir)) {
             throw new InvalidArgumentException(sprintf('The directory "%s" does not exist.', $dir));
@@ -112,9 +109,8 @@ class FixtureGeneratorBuilder
      * Adds a map of namespace prefixes to directories.
      *
      * @param array<string, string> $namespacePrefixToDirMap
-     * @return $this
      */
-    public function addMetadataDirs(array $namespacePrefixToDirMap)
+    public function addMetadataDirs(array $namespacePrefixToDirMap): self
     {
         foreach ($namespacePrefixToDirMap as $prefix => $dir) {
             $this->addMetadataDir($dir, $prefix);
@@ -122,80 +118,56 @@ class FixtureGeneratorBuilder
         return $this;
     }
 
-    /**
-     * @param DefaultMetadataDriverFactory $metadataDriverFactory
-     * @return FixtureGeneratorBuilder
-     */
-    public function setMetadataDriverFactory(DefaultMetadataDriverFactory $metadataDriverFactory)
+    public function setMetadataDriverFactory(DefaultMetadataDriverFactory $metadataDriverFactory): FixtureGeneratorBuilder
     {
         $this->metadataDriverFactory = $metadataDriverFactory;
 
         return $this;
     }
 
-    /**
-     * @param mixed $persister
-     * @return FixtureGeneratorBuilder
-     */
-    public function setPersister(PersisterInterface $persister)
+    public function setPersister(PersisterInterface $persister): FixtureGeneratorBuilder
     {
         $this->persister = $persister;
 
         return $this;
     }
 
-    /**
-     * @param Reader $annotationReader
-     * @return FixtureGeneratorBuilder
-     */
-    public function setAnnotationReader(Reader $annotationReader)
+    public function setAnnotationReader(Reader $annotationReader): FixtureGeneratorBuilder
     {
         $this->annotationReader = $annotationReader;
 
         return $this;
     }
 
-    /**
-     * @param MetadataResolver $metadataResolver
-     * @return FixtureGeneratorBuilder
-     */
-    public function setMetadataResolver(MetadataResolver $metadataResolver)
+    public function setMetadataResolver(MetadataResolver $metadataResolver): FixtureGeneratorBuilder
     {
         $this->metadataResolver = $metadataResolver;
 
         return $this;
     }
 
-    public function configureMetadataResolver(\Closure $closure)
+    public function configureMetadataResolver(\Closure $closure): self
     {
         $closure($this->metadataResolver);
 
         return $this;
     }
 
-    /**
-     * @param ObjectHandlerRegistryInterface $objectHandlerRegistry
-     * @return FixtureGeneratorBuilder
-     */
-    public function setObjectHandlerRegistry(ObjectHandlerRegistryInterface $objectHandlerRegistry)
+    public function setObjectHandlerRegistry(ObjectHandlerRegistryInterface $objectHandlerRegistry): FixtureGeneratorBuilder
     {
         $this->objectHandlerRegistry    = $objectHandlerRegistry;
 
         return $this;
     }
 
-    /**
-     * @param PropertyNamerInterface $propertyNamer
-     * @return FixtureGeneratorBuilder
-     */
-    public function setPropertyNamer(PropertyNamerInterface $propertyNamer)
+    public function setPropertyNamer(PropertyNamerInterface $propertyNamer): FixtureGeneratorBuilder
     {
         $this->propertyNamer = $propertyNamer;
 
         return $this;
     }
 
-    public function addDefaultObjectHandlers()
+    public function addDefaultObjectHandlers(): self
     {
         $this->objectHandlersConfigured = true;
         $this->objectHandlerRegistry->registerHandlers([
@@ -206,7 +178,7 @@ class FixtureGeneratorBuilder
         return $this;
     }
 
-    public function configureObjectHandlerRegistry(\Closure $closure)
+    public function configureObjectHandlerRegistry(\Closure $closure): self
     {
         $this->objectHandlersConfigured = true;
         $closure($this->objectHandlerRegistry);
@@ -214,24 +186,21 @@ class FixtureGeneratorBuilder
         return $this;
     }
 
-    public function setYamlWriter(YamlWriterInterface $yamlWriter)
+    public function setYamlWriter(YamlWriterInterface $yamlWriter): self
     {
         $this->yamlWriter = $yamlWriter;
 
         return $this;
     }
 
-    public function setStrictTypeChecking($enabled)
+    public function setStrictTypeChecking(bool $enabled): self
     {
         $this->strictTypeChecking = $enabled;
 
         return $this;
     }
 
-    /**
-     * @return FixtureGenerator
-     */
-    public function build()
+    public function build(): FixtureGenerator
     {
         $metadataFactory = new MetadataFactory(
             $this->metadataDriverFactory->createDriver($this->metadataDirs, $this->annotationReader)

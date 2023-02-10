@@ -13,12 +13,9 @@ class YamlDriver extends AbstractFileDriver
     /**
      * Parses the content of the file, and converts it to the desired metadata.
      *
-     * @param \ReflectionClass $class
      * @param string           $file
-     *
-     * @return \Metadata\ClassMetadata|null
      */
-    protected function loadMetadataFromFile(\ReflectionClass $class, $file)
+    protected function loadMetadataFromFile(\ReflectionClass $class, $file): ?\Metadata\ClassMetadata
     {
         $config = Yaml::parse(file_get_contents($file));
 
@@ -73,10 +70,8 @@ class YamlDriver extends AbstractFileDriver
 
     /**
      * Returns the extension of the file.
-     *
-     * @return string
      */
-    protected function getExtension()
+    protected function getExtension(): string
     {
         return 'yml';
     }

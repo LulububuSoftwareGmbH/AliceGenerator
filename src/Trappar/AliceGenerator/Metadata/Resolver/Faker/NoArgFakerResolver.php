@@ -8,6 +8,8 @@ class NoArgFakerResolver extends AbstractFakerResolver
 {
     /**
      * @inheritdoc
+     *
+     * @return string|null
      */
     public function getType()
     {

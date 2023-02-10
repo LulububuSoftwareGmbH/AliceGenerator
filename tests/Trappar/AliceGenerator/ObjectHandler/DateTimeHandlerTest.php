@@ -13,12 +13,12 @@ class DateTimeHandlerTest extends TestCase
      */
     private $handler;
 
-    public function setup()
+    public function setup(): void
     {
         $this->handler = new DateTimeHandler();
     }
 
-    public function testDateOnly()
+    public function testDateOnly(): void
     {
         $valueContext = new ValueContext(new \DateTime('Aug 3, 1955'));
 
@@ -27,7 +27,7 @@ class DateTimeHandlerTest extends TestCase
         $this->assertSame('<(new \DateTime("1955-08-03"))>', $valueContext->getValue());
     }
 
-    public function testDateTime()
+    public function testDateTime(): void
     {
         $valueContext = new ValueContext(new \DateTime('Aug 3, 1955 12PM', new \DateTimeZone('UTC')));
 

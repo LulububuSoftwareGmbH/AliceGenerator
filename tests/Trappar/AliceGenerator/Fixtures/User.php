@@ -46,9 +46,9 @@ class User
      * @ORM\Column(name="roles", type="simple_array")
      */
     public $roles = ['ROLE_USER'];
-    
+
     /**
-     * @var Post[]
+     * @var ArrayCollection<(int|string),Post>|Post[]
      * @ORM\OneToMany(targetEntity="Post", mappedBy="postedBy", cascade={"persist"})
      */
     public $posts;

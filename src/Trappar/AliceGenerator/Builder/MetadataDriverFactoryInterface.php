@@ -9,9 +9,6 @@ interface MetadataDriverFactoryInterface
 {
     /**
      * @param array $metadataDirs
-     * @param Reader $annotationReader
-     *
-     * @return DriverInterface
      */
-    public function createDriver(array $metadataDirs, Reader $annotationReader);
+    public function createDriver(array $metadataDirs, Reader $annotationReader): DriverInterface;
 }

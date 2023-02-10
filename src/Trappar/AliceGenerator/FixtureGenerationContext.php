@@ -38,24 +38,18 @@ class FixtureGenerationContext
         $this->persistedObjectConstraints->setPersister(new NonSpecificPersister());
     }
 
-    public static function create()
+    public static function create(): self
     {
+        /** @phpstan-ignore-next-line */
         return new static();
     }
 
-    /**
-     * @return int
-     */
-    public function getMaximumRecursion()
+    public function getMaximumRecursion(): int
     {
         return $this->maximumRecursion;
     }
 
-    /**
-     * @param int $max
-     * @return FixtureGenerationContext
-     */
-    public function setMaximumRecursion($max)
+    public function setMaximumRecursion(int $max): FixtureGenerationContext
     {
         $this->maximumRecursion = $max;
 
@@ -63,10 +57,9 @@ class FixtureGenerationContext
     }
 
     /**
-     * @param array|object $objects
-     * @return FixtureGenerationContext
+     * @param array|mixed $objects
      */
-    public function addPersistedObjectConstraint($objects)
+    public function addPersistedObjectConstraint($objects): FixtureGenerationContext
     {
         $objects = is_array($objects) ? $objects : [$objects];
 
@@ -82,62 +75,41 @@ class FixtureGenerationContext
         return $this;
     }
 
-    public function getPersistedObjectConstraints()
+    public function getPersistedObjectConstraints(): PersistedObjectConstraints
     {
         return $this->persistedObjectConstraints;
     }
 
-    /**
-     * @return ReferenceNamerInterface
-     */
-    public function getReferenceNamer()
+    public function getReferenceNamer(): ReferenceNamerInterface
     {
         return $this->referenceNamer;
     }
 
-    /**
-     * @param ReferenceNamerInterface $referenceNamer
-     * @return FixtureGenerationContext
-     */
-    public function setReferenceNamer(ReferenceNamerInterface $referenceNamer)
+    public function setReferenceNamer(ReferenceNamerInterface $referenceNamer): FixtureGenerationContext
     {
         $this->referenceNamer = $referenceNamer;
 
         return $this;
     }
 
-    /**
-     * @return boolean
-     */
-    public function isExcludeDefaultValuesEnabled()
+    public function isExcludeDefaultValuesEnabled(): bool
     {
         return $this->excludeDefaultValues;
     }
 
-    /**
-     * @param boolean $excludeDefaultValues
-     * @return FixtureGenerationContext
-     */
-    public function setExcludeDefaultValues($excludeDefaultValues)
+    public function setExcludeDefaultValues(bool $excludeDefaultValues): FixtureGenerationContext
     {
         $this->excludeDefaultValues = $excludeDefaultValues;
 
         return $this;
     }
 
-    /**
-     * @return boolean
-     */
-    public function isSortResultsEnabled()
+    public function isSortResultsEnabled(): bool
     {
         return $this->sortResults;
     }
 
-    /**
-     * @param boolean $sortResults
-     * @return FixtureGenerationContext
-     */
-    public function setSortResults($sortResults)
+    public function setSortResults(bool $sortResults): FixtureGenerationContext
     {
         $this->sortResults = $sortResults;
 

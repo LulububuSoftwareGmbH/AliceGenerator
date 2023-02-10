@@ -9,7 +9,7 @@ class PropertyNamer implements PropertyNamerInterface
     /**
      * @inheritdoc
      */
-    public function createName(ValueContext $context)
+    public function createName(ValueContext $context): string
     {
         return $context->getPropName();
     }
