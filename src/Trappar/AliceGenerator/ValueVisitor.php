@@ -2,7 +2,10 @@
 
 namespace Trappar\AliceGenerator;
 
+use InvalidArgumentException;
 use Metadata\MetadataFactoryInterface;
+use ReflectionClass;
+use ReflectionProperty;
 use Trappar\AliceGenerator\DataStorage\PersistedObjectCache;
 use Trappar\AliceGenerator\DataStorage\ValueContext;
 use Trappar\AliceGenerator\Exception\InvalidPropertyNameException;
@@ -13,26 +16,32 @@ use Trappar\AliceGenerator\PropertyNamer\PropertyNamerInterface;
 
 class ValueVisitor
 {
+
     /**
      * @var MetadataFactoryInterface
      */
     private $metadataFactory;
+
     /**
      * @var PersistedObjectCache
      */
     private $persistedObjectCache;
+
     /**
      * @var PersisterInterface
      */
     private $persister;
+
     /**
      * @var MetadataResolverInterface
      */
     private $metadataResolver;
+
     /**
      * @var ObjectHandlerRegistryInterface
      */
     private $objectHandlerRegistry;
+
     /**
      * @var PropertyNamerInterface
      */
@@ -42,14 +51,17 @@ class ValueVisitor
      * @var FixtureGenerationContext
      */
     private $fixtureGenerationContext;
+
     /**
      * @var array
      */
     private $results;
+
     /**
      * @var int
      */
     private $recursionDepth;
+
     /**
      * @var bool
      */
@@ -62,14 +74,13 @@ class ValueVisitor
         ObjectHandlerRegistryInterface $objectHandlerRegistry,
         PropertyNamerInterface $propertyNamer,
         bool $strictTypeChecking
-    )
-    {
-        $this->metadataFactory       = $metadataFactory;
-        $this->persister             = $persister;
-        $this->metadataResolver      = $metadataResolver;
+    ) {
+        $this->metadataFactory = $metadataFactory;
+        $this->persister = $persister;
+        $this->metadataResolver = $metadataResolver;
         $this->objectHandlerRegistry = $objectHandlerRegistry;
-        $this->propertyNamer         = $propertyNamer;
-        $this->strictTypeChecking    = $strictTypeChecking;
+        $this->propertyNamer = $propertyNamer;
+        $this->strictTypeChecking = $strictTypeChecking;
     }
 
     public function setup(FixtureGenerationContext $fixtureGenerationContext): void
@@ -77,7 +88,7 @@ class ValueVisitor
         $this->fixtureGenerationContext = $fixtureGenerationContext;
 
         // Reset caches
-        $this->results              = [];
+        $this->results = [];
         $this->persistedObjectCache = new PersistedObjectCache();
         $this->persistedObjectCache->setPersister($this->persister);
         $this->fixtureGenerationContext->getPersistedObjectConstraints()->setPersister($this->persister);
@@ -142,13 +153,13 @@ class ValueVisitor
                 return;
             }
 
-            $result         = $this->persistedObjectCache->find($object);
+            $result = $this->persistedObjectCache->find($object);
             $referenceNamer = $this->fixtureGenerationContext->getReferenceNamer();
 
             switch ($result) {
                 case PersistedObjectCache::OBJECT_NOT_FOUND:
                     if ($this->recursionDepth <= $this->fixtureGenerationContext->getMaximumRecursion()) {
-                        $key       = $this->persistedObjectCache->add($object);
+                        $key = $this->persistedObjectCache->add($object);
                         $reference = $referenceNamer->createReference($object, $key);
 
                         $objectAdded = $this->handlePersistedObject($object, $reference);
@@ -189,8 +200,10 @@ class ValueVisitor
     }
 
     /**
-     * Returns true if the object was added to the object cache.
+     * @param       $object
+     * @param       $reference
      *
+     * @return bool if the object was added to the object cache
      * @throws \Exception
      */
     private function handlePersistedObject(object $object, string $reference): bool
@@ -200,14 +213,17 @@ class ValueVisitor
         $classMetadata = $this->metadataFactory->getMetadataForClass($class);
 
         // Create a new instance of this class to check values against
-        $newObject = $classMetadata->reflection->newInstanceWithoutConstructor();
+        $reflection = new ReflectionClass($classMetadata->name);
+        $newObject = $reflection->newInstanceWithoutConstructor();
 
         $saveValues = [];
         $this->recursionDepth++;
 
         foreach ($classMetadata->propertyMetadata as $metadata) {
-            $value        = $metadata->reflection->getValue($object);
-            $initialValue = $metadata->reflection->getValue($newObject);
+            $propertyReflection = $this->property($reflection, $metadata->name);
+            $propertyReflection->setAccessible(true);
+            $value = $propertyReflection->getValue($object);
+            $initialValue = $propertyReflection->getValue($newObject);
 
             $valueContext = new ValueContext($value, $class, $object, $metadata, $this);
 
@@ -256,5 +272,19 @@ class ValueVisitor
 
             return true;
         }
+    }
+
+    private function property(ReflectionClass $reflection, string $name): ReflectionProperty
+    {
+        do {
+            if (!$reflection->hasProperty($name)) {
+                continue;
+            }
+
+            return $reflection->getProperty($name);
+        } while ($reflection = $reflection->getParentClass());
+
+        $reflectionName = $reflection->getName();
+        throw new InvalidArgumentException(sprintf('Property %s does not exist in %s', $name, $reflectionName));
     }
 }
