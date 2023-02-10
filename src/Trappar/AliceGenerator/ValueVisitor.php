@@ -10,6 +10,7 @@ use Trappar\AliceGenerator\DataStorage\PersistedObjectCache;
 use Trappar\AliceGenerator\DataStorage\ValueContext;
 use Trappar\AliceGenerator\Exception\InvalidPropertyNameException;
 use Trappar\AliceGenerator\Exception\UnknownObjectTypeException;
+use Trappar\AliceGenerator\Metadata\PropertyMetadata;
 use Trappar\AliceGenerator\Metadata\Resolver\MetadataResolverInterface;
 use Trappar\AliceGenerator\Persister\PersisterInterface;
 use Trappar\AliceGenerator\PropertyNamer\PropertyNamerInterface;
@@ -213,19 +214,19 @@ class ValueVisitor
         $classMetadata = $this->metadataFactory->getMetadataForClass($class);
 
         // Create a new instance of this class to check values against
-        $reflection = new ReflectionClass($classMetadata->name);
-        $newObject = $reflection->newInstanceWithoutConstructor();
+        $classReflection = new ReflectionClass($classMetadata->name);
+        $newObject = $classReflection->newInstanceWithoutConstructor();
 
         $saveValues = [];
         $this->recursionDepth++;
 
-        foreach ($classMetadata->propertyMetadata as $metadata) {
-            $propertyReflection = $this->property($reflection, $metadata->name);
+        foreach ($classMetadata->propertyMetadata as $propertyMetadata) {
+            $propertyReflection = new ReflectionProperty($propertyMetadata->class, $propertyMetadata->name);
             $propertyReflection->setAccessible(true);
             $value = $propertyReflection->getValue($object);
-            $initialValue = $propertyReflection->getValue($newObject);
 
-            $valueContext = new ValueContext($value, $class, $object, $metadata, $this);
+            /** @var PropertyMetadata $propertyMetadata */
+            $valueContext = new ValueContext($value, $class, $object, $propertyMetadata, $this);
 
             if ($this->persister->isPropertyNoOp($valueContext)) {
                 continue;
@@ -236,7 +237,13 @@ class ValueVisitor
             if (!$valueContext->isModified() && !$valueContext->isSkipped()) {
                 $value = $valueContext->getValue();
 
+                if (is_null($value)) {
+                    continue;
+                }
+
                 if ($this->fixtureGenerationContext->isExcludeDefaultValuesEnabled()) {
+                    $initialValue = $propertyReflection->getValue($newObject);
+
                     // Avoid setting unnecessary data
                     if ($this->strictTypeChecking || is_null($value) || is_bool($value) || is_object($value)) {
                         if ($value === $initialValue) {
